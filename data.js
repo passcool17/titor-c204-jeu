@@ -1,10 +1,10 @@
-/* C204 · Mission Titor — textes, fiches, sources. v0.1.1
+/* C204 · Mission Titor — textes, fiches, sources. v0.1.2
    Rien n'est présenté comme réel s'il n'est pas vérifiable.
    « Documenté » = fait vérifiable, avec URL. « Jamais authentifié » = affirmation des posts de Titor, jamais confirmée.
    « Ajout de modèle » = détail géométrique ajouté pour le GLB, absent des documents de 2000-2001.
 */
 
-export const VERSION = '0.1.1';
+export const VERSION = '0.1.2';
 
 export const LINKS = [
   { id: 'machine', title: 'C204 · 2001 — unité et dossier', url: 'https://passcool17.github.io/titor-c204/', note: 'Scène Machine de l’unité, fiches et dossier.' },
@@ -60,6 +60,12 @@ export const SOURCES = [
     title: 'Roy P. Kerr, « Gravitational Field of a Spinning Mass as an Example of Algebraically Special Metrics », Physical Review Letters 11, 237 (1er septembre 1963)',
     url: 'https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.11.237',
     note: 'Article qui introduit la métrique de Kerr, solution des équations d’Einstein décrivant le champ gravitationnel d’une masse en rotation — aujourd’hui le modèle standard des trous noirs en rotation. DOI : 10.1103/PhysRevLett.11.237.',
+  },
+  {
+    id: 'ibm5100-model',
+    title: 'Computer IBM 5100 by Danny Kuzmishchev, CC BY 4.0, Sketchfab',
+    url: 'https://sketchfab.com/3d-models/computer-ibm-5100-e2767c9c3fb549ccbd82b25555244dd6',
+    note: 'Modèle 3D de l’IBM 5100 utilisé dans ce jeu. Adaptation low-poly (statique, 3 436 triangles) dérivée de ce modèle Sketchfab, sous la même licence CC BY 4.0. Ce n’est pas une pièce IBM officielle. L’ordinateur réel (1975) et son émulation System/360 sont documentés séparément (Post Bulletin, alt.folklore.computers).',
   },
 ];
 

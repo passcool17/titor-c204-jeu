@@ -14,6 +14,7 @@ const PRECACHE = [
   './data.js',
   './assets/c204-v2.glb',
   './assets/corvette-v2.glb',
+  './assets/ibm5100.glb',
   './vendor/detect-gpu.esm.js',
   './vendor/draco/gltf/draco_decoder.js',
   './vendor/draco/gltf/draco_decoder.wasm',

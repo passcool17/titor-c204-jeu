@@ -1,4 +1,4 @@
-// v0.1.1 smoke: bug 1 (lives reset),  load, minigames via hook, jump, exploded card, 0 console errors
+// v0.1.2 smoke: IBM 5100, bug 1 (lives reset),  load, minigames via hook, jump, exploded card, 0 console errors
 // 412×915 and 915×412
 const { chromium } = require('playwright-core');
 const BASE = process.argv[2] || 'http://127.0.0.1:8768/?t=1';
@@ -57,12 +57,17 @@ async function suite(page, tag, w, h, shots) {
   const g = async (fn) => page.evaluate(fn);
 
   ok(prefix + 'ready', await g(() => !!__game.ready));
-  ok(prefix + 'version', (await g(() => __game.version)) === '0.1.1', await g(() => __game.version));
+  ok(prefix + 'version', (await g(() => __game.version)) === '0.1.2', await g(() => __game.version));
   const nodes = await g(() => __game.nodes);
   ok(prefix + 'nodes', nodes.includes('housing') && nodes.includes('cesium_clock_1') && nodes.includes('vgl_unit'), nodes.length);
   const clips = await g(() => __game.clips);
   ok(prefix + 'clips.c204', clips.c204.includes('explode') && clips.c204.includes('idle'), clips.c204);
   ok(prefix + 'clips.car', Array.isArray(clips.car), clips.car);
+
+  // IBM 5100 GLB: static, named nodes (meshes may be quantized children)
+  const ibmNodes = await g(() => __game.ibmNodes);
+  ok(prefix + 'ibm.nodes', ibmNodes.includes('ibm_5100') && ibmNodes.includes('ibm_5100_body') && ibmNodes.includes('ibm_5100_screen') && ibmNodes.includes('ibm_5100_tape'), ibmNodes);
+  ok(prefix + 'ibm.hiddenAtStart', (await g(() => __game.ibmVisible)) === false);
 
   // Bug 2: soft top hidden, Corvette glass is simple alpha (no transmission)
   const vis = await g(() => {
@@ -156,6 +161,15 @@ async function suite(page, tag, w, h, shots) {
   ok(prefix + 'jump.success', after.ibm === true && after.score > 0, after);
   const resShown = await page.evaluate(() => !document.getElementById('result').classList.contains('hidden'));
   ok(prefix + 'result.shown', resShown);
+  ok(prefix + 'ibm.visibleAfterJump', (await g(() => __game.ibmVisible)) === true);
+  const ibmSeat = await g(() => {
+    const n = __game.ibm;
+    const body = n && (n.getObjectByName('ibm_5100_body') || n);
+    let mesh = 0;
+    n && n.traverse((o) => { if (o.isMesh && o.visible) mesh++; });
+    return { has: !!n, parent: n?.parent?.name || n?.parent?.type, meshes: mesh, pos: n ? n.position.toArray() : null };
+  });
+  ok(prefix + 'ibm.seated', ibmSeat.has && ibmSeat.meshes >= 3, ibmSeat);
 
   // Drive measure (start next or go drive)
   await g(() => { __game.goMenu(); __game.startDrive(); });
@@ -196,11 +210,17 @@ async function suite(page, tag, w, h, shots) {
   await page.waitForFunction(() => window.__game.mode === 'drive', null, { timeout: 8000 });
   const fresh = await g(() => ({ lives: __game.lives, score: __game.score, level: __game.level, ibm: __game.ibmGot, mode: __game.mode }));
   ok(prefix + 'newRun.lives3', fresh.lives === 3 && fresh.score === 0 && fresh.level === 1 && fresh.ibm === false && fresh.mode === 'drive', fresh);
+  ok(prefix + 'ibm.hiddenNewRun', (await g(() => __game.ibmVisible)) === false);
 
   // Sources page has links
   await g(() => __game.openSources());
   const srcCount = await page.evaluate(() => document.querySelectorAll('#srcList a[href]').length);
-  ok(prefix + 'sources.links', srcCount >= 6, srcCount);
+  ok(prefix + 'sources.links', srcCount >= 9, srcCount);
+  const ibmCredit = await page.evaluate(() => {
+    const a = [...document.querySelectorAll('#srcList a[href]')].find((el) => el.href.includes('sketchfab.com/3d-models/computer-ibm-5100-e2767c9c3fb549ccbd82b25555244dd6'));
+    return a ? { href: a.href, title: a.textContent } : null;
+  });
+  ok(prefix + 'sources.ibmCredit', !!ibmCredit && /Danny Kuzmishchev/i.test(ibmCredit.title) && /CC BY 4.0/i.test(ibmCredit.title), ibmCredit);
 
   return { mMenu, mExp, mMg, mJump, mDrive };
 }

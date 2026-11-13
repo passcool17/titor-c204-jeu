@@ -20,6 +20,7 @@ let renderer, scene, camera, clock;
 let pmrem = null;
 let c204 = { root: null, mixer: null, clips: {}, nodes: new Map(), boxes: new Map() };
 let car = { root: null, mixer: null, clips: {}, wheels: [] };
+let ibm = { root: null, nodes: new Map() };
 let env = { road: null, roadTex: null, rings: null, stars: null, ground: null };
 let mode = 'loading';
 let score = 0, lives = 3, level = 1, ibmGot = false;
@@ -330,7 +331,9 @@ async function loadModels() {
   const gUnit = await loadGltf(loader, './assets/c204-v2.glb');
   setLoad(0.55, 'Chargement de la Corvette…');
   const gCar = await loadGltf(loader, './assets/corvette-v2.glb');
-  setLoad(0.85, 'Préparation de la scène…');
+  setLoad(0.78, 'Chargement de l’IBM 5100…');
+  const gIbm = await loadGltf(loader, './assets/ibm5100.glb');
+  setLoad(0.88, 'Préparation de la scène…');
 
   c204.root = gUnit.scene;
   c204.root.name = 'c204_standalone';
@@ -386,6 +389,40 @@ async function loadModels() {
 
   playClip(c204, 'idle', THREE.LoopRepeat);
   if (car.clips.idle) playClip(car, 'idle', THREE.LoopRepeat);
+
+  // IBM 5100: static, no clips. Root ibm_5100, meshes may sit on quantized children.
+  // Front +Z, origin bottom center, Y-up, 0.4465 × 0.2038 × 0.6123 m. Screen emissive 1.2.
+  ibm.root = gIbm.scene.getObjectByName('ibm_5100') || gIbm.scene;
+  ibm.root.traverse((o) => {
+    if (o.name) ibm.nodes.set(o.name, o);
+    if (!o.isMesh) return;
+    o.castShadow = false;
+    o.receiveShadow = false;
+    const mats = Array.isArray(o.material) ? o.material : [o.material];
+    for (const m of mats) {
+      if (m && 'transmission' in m && m.transmission) m.transmission = 0;
+    }
+  });
+  seatIbm();
+  setIbmVisible(false);
+}
+
+/** Sit the IBM on the passenger-seat cushion, parented to the car (follows drive / jump).
+ *  setFromObject on the whole seat includes the backrest (~0.88 m); the cushion top
+ *  (front half of the mesh) is ≈ 0.445 m. Front +Z (Rendu) faces the windshield. */
+function seatIbm() {
+  if (!ibm.root || !car.root) return;
+  if (ibm.root.parent !== car.root) car.root.add(ibm.root);
+  const seat = car.root.getObjectByName('seat_r') || car.root.getObjectByName('seat_l');
+  const x = seat ? seat.position.x : -0.36;
+  const z = seat ? seat.position.z - 0.04 : -0.22;
+  ibm.root.position.set(x, 0.445, z);
+  ibm.root.rotation.set(0, 0, 0);
+  ibm.root.scale.set(1, 1, 1);
+}
+
+function setIbmVisible(on) {
+  if (ibm.root) ibm.root.visible = !!on;
 }
 
 function applyOrbit() {
@@ -1306,9 +1343,10 @@ function onJumpSuccess(bonus) {
   refreshHud();
   if (level === 1) {
     ibmGot = true;
+    setIbmVisible(true);
     showResult(
       '1975 — IBM 5100 à bord',
-      'Premier saut réussi. Dans le récit de Titor, c’est ici qu’il récupère l’IBM 5100. (La récupération, dans ce jeu, est un palier : aucun appareil réel n’est mis en scène.) Bonus de stabilité : ' + bonus + '.',
+      'Premier saut réussi. Dans le récit de Titor, c’est ici qu’il récupère l’IBM 5100. L’ordinateur est maintenant sur le siège passager (modèle 3D, crédit dans Sources). Bonus de stabilité : ' + bonus + '.',
       'Lancer le retour vers 2036',
       () => { level = 2; hideResult(); startDrive(); refreshHud(); },
     );
@@ -1344,6 +1382,7 @@ function onResultGo() { const cb = resultCb; resultCb = null; hideResult(); if (
 
 function resetRun() {
   score = 0; lives = 3; level = 1; ibmGot = false;
+  setIbmVisible(false);
   if (currentMini) { currentMini.destroy(); currentMini = null; }
   jumpState = null;
   sequenceActive = false;
@@ -1479,6 +1518,10 @@ function installHook() {
     source: 'glb',
     get car() { return car.root; },
     get unit() { return c204.root; },
+    get ibm() { return ibm.root; },
+    get ibmVisible() { return !!(ibm.root && ibm.root.visible); },
+    get ibmNodes() { return [...ibm.nodes.keys()]; },
+    setIbmVisible,
     get nodes() { return [...c204.nodes.keys()]; },
     get clips() { return { c204: Object.keys(c204.clips), car: Object.keys(car.clips) }; },
     get cardIds() { return Object.keys(CARDS); },
