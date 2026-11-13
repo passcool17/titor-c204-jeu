@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#07090c">
+<meta name="color-scheme" content="dark">
+<meta name="description" content="Mission Titor : jeu 3D, opérateur de l’unité C204 dans une Corvette 1967. Les faits vérifiables sont sourcés ; le récit de Titor n’a jamais été authentifié.">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="mobile-web-app-capable" content="yes">
+<title>Mission Titor · C204</title>
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%2307090c'/%3E%3Ccircle cx='6' cy='8' r='2.2' fill='%23e8b44c'/%3E%3Ccircle cx='11' cy='8' r='2.2' fill='%237fdcff'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="./style.css?v=0.1.0">
+<script type="importmap">
+{"imports":{
+  "three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+  "three/addons/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+}}
+</script>
+</head>
+<body>
+<canvas id="c" aria-hidden="true"></canvas>
+
+<div id="loading" role="status">
+  <p class="load-kicker">Army Model GE / C204</p>
+  <h1>Mission Titor</h1>
+  <p class="load-sub">Chargement de l’unité et de la Corvette…</p>
+  <div class="load-bar" aria-hidden="true"><i id="loadBar"></i></div>
+</div>
+
+<header id="top">
+  <div class="ttl">
+    <b id="ttlMain">Mission Titor</b>
+    <span id="ttlSub">Opérateur C204 · Corvette 1967</span>
+  </div>
+  <div id="topBtns">
+    <div id="hudStats" class="hidden" aria-live="polite">
+      <span id="hudScore" title="Score">0</span>
+      <span id="hudLives" title="Vies">●●●</span>
+      <span id="hudLevel" title="Saut">2036 → 1975</span>
+    </div>
+    <button type="button" id="bMute" class="ico" aria-label="Couper le son" aria-pressed="false">🔊</button>
+    <button type="button" id="bFull" class="ico" aria-label="Plein écran">⛶</button>
+  </div>
+</header>
+
+<section id="menu" class="panel hidden" aria-labelledby="menuTitle">
+  <p class="kicker">Jeu 3D · simulation</p>
+  <h1 id="menuTitle">Mission Titor</h1>
+  <p class="lead">Tu es l’opérateur de l’unité C204, dans une Corvette 1967. Mission racontée par John Titor (2000-2001) : aller en 1975 chercher un IBM 5100, revenir en 2036.</p>
+  <p class="disclaimer">Ceci est un jeu. Aucune machine de ce type n’a été démontrée. Chaque fiche est étiquetée <b>Documenté</b> ou <b>Jamais authentifié</b>.</p>
+  <div class="actions">
+    <button type="button" id="bMission" class="primary">Commencer la mission</button>
+    <button type="button" id="bExplode">Vue éclatée</button>
+    <button type="button" id="bSources">Sources</button>
+    <button type="button" id="bLinks">Autres scènes</button>
+  </div>
+</section>
+
+<section id="briefing" class="panel hidden" aria-labelledby="brTitle">
+  <button type="button" class="close" data-close="briefing" aria-label="Fermer">✕</button>
+  <h2 id="brTitle">Briefing</h2>
+  <div id="brBody"></div>
+  <button type="button" id="bBriefGo" class="primary">Prendre le volant</button>
+</section>
+
+<section id="sources" class="panel scroll hidden" aria-labelledby="srcTitle">
+  <button type="button" class="close" data-close="sources" aria-label="Fermer">✕</button>
+  <h2 id="srcTitle">Sources</h2>
+  <blockquote id="srcQuote"></blockquote>
+  <div id="srcList"></div>
+  <p class="disclaimer">Rien n’est présenté ici comme réel s’il n’est pas vérifiable. Les personnes sont citées comme références dans le texte, sans portrait.</p>
+</section>
+
+<section id="links" class="panel hidden" aria-labelledby="lnkTitle">
+  <button type="button" class="close" data-close="links" aria-label="Fermer">✕</button>
+  <h2 id="lnkTitle">Autres scènes</h2>
+  <p>Liens vers les applications déjà publiées. Les liens retour depuis ces applications vers ce jeu n’ont pas encore été ajoutés (accord de Pascal requis).</p>
+  <div id="lnkList"></div>
+</section>
+
+<section id="sheet" class="sheet hidden" role="dialog" aria-modal="true" aria-labelledby="shTitle">
+  <button type="button" class="close" data-close="sheet" aria-label="Fermer la fiche">✕</button>
+  <div id="shTag" class="tag"></div>
+  <p id="shRef" class="ref"></p>
+  <h2 id="shTitle"></h2>
+  <p id="shEn" class="en"></p>
+  <p id="shBody"></p>
+  <p id="shFact"></p>
+  <ul id="shSrc" class="src-links"></ul>
+</section>
+
+<div id="mini" class="hidden" aria-live="polite">
+  <div id="miniHead">
+    <p id="miniStep">Étape 1 / 4</p>
+    <h2 id="miniTitle">Injection d’électrons</h2>
+    <p id="miniHelp"></p>
+  </div>
+  <div id="miniStage"></div>
+  <button type="button" id="bMiniAct" class="primary act">Injecter</button>
+</div>
+
+<div id="jumpHud" class="hidden" aria-live="polite">
+  <p id="jumpTitle">Saut en cours — tiens le champ</p>
+  <div class="stab"><label for="stabBar">Stabilité du champ</label><i><em id="stabBar"></em></i></div>
+  <p id="jumpHint"></p>
+</div>
+
+<div id="driveHint" class="hidden">Glisse le joystick pour conduire · bouton pour lancer la séquence de saut</div>
+
+<div id="touch" class="hidden">
+  <div id="joyL" class="joy" aria-label="Joystick gauche"><i></i></div>
+  <div id="joyR" class="joy hidden" aria-label="Joystick droit"><i></i></div>
+  <button type="button" id="bJump" class="primary act">Séquence de saut</button>
+</div>
+
+<section id="result" class="panel hidden" aria-labelledby="resTitle" role="alertdialog" aria-modal="true">
+  <h2 id="resTitle"></h2>
+  <p id="resBody"></p>
+  <p id="resScore" class="score-line"></p>
+  <div class="actions">
+    <button type="button" id="bResGo" class="primary">Continuer</button>
+    <button type="button" id="bResMenu">Menu</button>
+  </div>
+</section>
+
+<nav id="bar" class="hidden">
+  <button type="button" id="bBarMenu">Menu</button>
+  <button type="button" id="bBarExplode">Éclatée</button>
+  <button type="button" id="bBarSrc">Sources</button>
+</nav>
+
+<div id="fps" class="hidden" aria-hidden="true"></div>
+<div id="flash" aria-hidden="true"></div>
+
+<script type="module" src="./main.js?v=0.1.0"></script>
+</body>
+</html>

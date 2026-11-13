@@ -1,0 +1,728 @@
+{
+ "triangles": 5688,
+ "parts": [
+  {
+   "name": "housing",
+   "tris": 92,
+   "manual_ref": "p.4, p.7",
+   "label_fr": "Boîtier principal (coque étanche)",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "lid",
+   "tris": 44,
+   "manual_ref": "p.4, p.7 #7",
+   "label_fr": "Couvercle avec les instructions de contrôle (#7)",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "housing_hinge_01",
+   "tris": 28,
+   "manual_ref": "p.4",
+   "label_fr": "Charnière du couvercle",
+   "source": "Ajout de modélisation (non décrit dans le manuel)"
+  },
+  {
+   "name": "housing_hinge_02",
+   "tris": 28,
+   "manual_ref": "p.4",
+   "label_fr": "Charnière du couvercle",
+   "source": "Ajout de modélisation (non décrit dans le manuel)"
+  },
+  {
+   "name": "housing_deck",
+   "tris": 12,
+   "manual_ref": "p.7",
+   "label_fr": "Pont supérieur (singularités, écran, commandes)",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "housing_id_plate",
+   "tris": 12,
+   "manual_ref": "p.2, p.8",
+   "label_fr": "Plaque : ARMY MODEL GE/C204 – RESTRICTED FILE TMH-2006/4605",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "housing_warning_plate",
+   "tris": 12,
+   "manual_ref": "—",
+   "label_fr": "Plaque de danger (singularité)",
+   "source": "Ajout de modélisation (non décrit dans le manuel)"
+  },
+  {
+   "name": "housing_handle_01",
+   "tris": 44,
+   "manual_ref": "p.4",
+   "label_fr": "Poignée de transport",
+   "source": "Ajout de modélisation (non décrit dans le manuel)"
+  },
+  {
+   "name": "housing_handle_02",
+   "tris": 44,
+   "manual_ref": "p.4",
+   "label_fr": "Poignée de transport",
+   "source": "Ajout de modélisation (non décrit dans le manuel)"
+  },
+  {
+   "name": "housing_latch_01",
+   "tris": 44,
+   "manual_ref": "p.4",
+   "label_fr": "Loquet du couvercle",
+   "source": "Ajout de modélisation (non décrit dans le manuel)"
+  },
+  {
+   "name": "housing_latch_02",
+   "tris": 44,
+   "manual_ref": "p.4",
+   "label_fr": "Loquet du couvercle",
+   "source": "Ajout de modélisation (non décrit dans le manuel)"
+  },
+  {
+   "name": "housing_latch_03",
+   "tris": 44,
+   "manual_ref": "p.4",
+   "label_fr": "Loquet du couvercle",
+   "source": "Ajout de modélisation (non décrit dans le manuel)"
+  },
+  {
+   "name": "housing_foot_01",
+   "tris": 28,
+   "manual_ref": "—",
+   "label_fr": "Patin en caoutchouc",
+   "source": "Ajout de modélisation (non décrit dans le manuel)"
+  },
+  {
+   "name": "housing_foot_02",
+   "tris": 28,
+   "manual_ref": "—",
+   "label_fr": "Patin en caoutchouc",
+   "source": "Ajout de modélisation (non décrit dans le manuel)"
+  },
+  {
+   "name": "housing_foot_03",
+   "tris": 28,
+   "manual_ref": "—",
+   "label_fr": "Patin en caoutchouc",
+   "source": "Ajout de modélisation (non décrit dans le manuel)"
+  },
+  {
+   "name": "housing_foot_04",
+   "tris": 28,
+   "manual_ref": "—",
+   "label_fr": "Patin en caoutchouc",
+   "source": "Ajout de modélisation (non décrit dans le manuel)"
+  },
+  {
+   "name": "housing_xray_vent_L",
+   "tris": 12,
+   "manual_ref": "p.8 (#18)",
+   "label_fr": "Évents de rayons X",
+   "source": "Étiquette non officielle (forum Paranormalis, 2013)"
+  },
+  {
+   "name": "housing_xray_vent_R",
+   "tris": 12,
+   "manual_ref": "p.8 (#18)",
+   "label_fr": "Évents de rayons X",
+   "source": "Étiquette non officielle (forum Paranormalis, 2013)"
+  },
+  {
+   "name": "singularity_main_housing",
+   "tris": 60,
+   "manual_ref": "p.6 #1",
+   "label_fr": "Boîtier d'entraînement de la singularité principale (#1 p.7)",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "field_coil_main_1",
+   "tris": 192,
+   "manual_ref": "p.6 #2",
+   "label_fr": "Bobine de champ magnétique de la singularité principale (#1 p.7)",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "field_coil_main_2",
+   "tris": 192,
+   "manual_ref": "p.6 #2",
+   "label_fr": "Bobine de champ magnétique de la singularité principale (#1 p.7)",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "field_coil_main_3",
+   "tris": 192,
+   "manual_ref": "p.6 #2",
+   "label_fr": "Bobine de champ magnétique de la singularité principale (#1 p.7)",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "singularity_main_rotor",
+   "tris": 128,
+   "manual_ref": "p.6 #1",
+   "label_fr": "Anneau de confinement tournant (« top-spin ») – principale (#1 p.7) ; tourner autour de Z",
+   "source": "Ajout de modélisation (non décrit dans le manuel)"
+  },
+  {
+   "name": "singularity_main_core",
+   "tris": 120,
+   "manual_ref": "p.6 #1 ; message « two top-spin, dual-positive singularities »",
+   "label_fr": "Micro-singularité principale (#1 p.7) (visualisation)",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "mag_field_generator_main",
+   "tris": 44,
+   "manual_ref": "p.6 #3",
+   "label_fr": "Générateur / régulateur de champ magnétique – principale (#1 p.7)",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "cooling_housing_main",
+   "tris": 60,
+   "manual_ref": "p.6 #8",
+   "label_fr": "Collier de refroidissement de la singularité principale (#1 p.7)",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "motion_sensor_main",
+   "tris": 12,
+   "manual_ref": "p.6 #7",
+   "label_fr": "Capteur de mouvement de la singularité principale (#1 p.7)",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "singularity_main_port_ring",
+   "tris": 160,
+   "manual_ref": "p.7 #1/#2",
+   "label_fr": "Hublot de la singularité principale (#1 p.7) (bague)",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "singularity_main_port_glass",
+   "tris": 76,
+   "manual_ref": "p.7 #1/#2",
+   "label_fr": "Hublot de la singularité principale (#1 p.7) (verre)",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "electron_injector_manifold_main_rail",
+   "tris": 28,
+   "manual_ref": "p.6 #4",
+   "label_fr": "Collecteur d'injection de masse d'électrons – principale (#1 p.7)",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "electron_injector_manifold_main_nozzle",
+   "tris": 28,
+   "manual_ref": "p.6 #4",
+   "label_fr": "Buse d'injection d'électrons – principale (#1 p.7)",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "singularity_main_emergency_disconnect",
+   "tris": 44,
+   "manual_ref": "p.8 (#10/#12)",
+   "label_fr": "Coupure d'urgence de la singularité principale (#1 p.7)",
+   "source": "Étiquette non officielle (forum Paranormalis, 2013)"
+  },
+  {
+   "name": "singularity_steering_housing",
+   "tris": 60,
+   "manual_ref": "p.6 #1",
+   "label_fr": "Boîtier d'entraînement de la singularité de direction (#2 p.7)",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "field_coil_steering_1",
+   "tris": 192,
+   "manual_ref": "p.6 #2",
+   "label_fr": "Bobine de champ magnétique de la singularité de direction (#2 p.7)",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "field_coil_steering_2",
+   "tris": 192,
+   "manual_ref": "p.6 #2",
+   "label_fr": "Bobine de champ magnétique de la singularité de direction (#2 p.7)",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "field_coil_steering_3",
+   "tris": 192,
+   "manual_ref": "p.6 #2",
+   "label_fr": "Bobine de champ magnétique de la singularité de direction (#2 p.7)",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "singularity_steering_rotor",
+   "tris": 128,
+   "manual_ref": "p.6 #1",
+   "label_fr": "Anneau de confinement tournant (« top-spin ») – de direction (#2 p.7) ; tourner autour de Z",
+   "source": "Ajout de modélisation (non décrit dans le manuel)"
+  },
+  {
+   "name": "singularity_steering_core",
+   "tris": 120,
+   "manual_ref": "p.6 #1 ; message « two top-spin, dual-positive singularities »",
+   "label_fr": "Micro-singularité de direction (#2 p.7) (visualisation)",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "mag_field_generator_steering",
+   "tris": 44,
+   "manual_ref": "p.6 #3",
+   "label_fr": "Générateur / régulateur de champ magnétique – de direction (#2 p.7)",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "cooling_housing_steering",
+   "tris": 60,
+   "manual_ref": "p.6 #8",
+   "label_fr": "Collier de refroidissement de la singularité de direction (#2 p.7)",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "motion_sensor_steering",
+   "tris": 12,
+   "manual_ref": "p.6 #7",
+   "label_fr": "Capteur de mouvement de la singularité de direction (#2 p.7)",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "singularity_steering_port_ring",
+   "tris": 160,
+   "manual_ref": "p.7 #1/#2",
+   "label_fr": "Hublot de la singularité de direction (#2 p.7) (bague)",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "singularity_steering_port_glass",
+   "tris": 76,
+   "manual_ref": "p.7 #1/#2",
+   "label_fr": "Hublot de la singularité de direction (#2 p.7) (verre)",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "electron_injector_manifold_steering_rail",
+   "tris": 28,
+   "manual_ref": "p.6 #4",
+   "label_fr": "Collecteur d'injection de masse d'électrons – de direction (#2 p.7)",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "electron_injector_manifold_steering_nozzle",
+   "tris": 28,
+   "manual_ref": "p.6 #4",
+   "label_fr": "Buse d'injection d'électrons – de direction (#2 p.7)",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "singularity_steering_emergency_disconnect",
+   "tris": 44,
+   "manual_ref": "p.8 (#10/#12)",
+   "label_fr": "Coupure d'urgence de la singularité de direction (#2 p.7)",
+   "source": "Étiquette non officielle (forum Paranormalis, 2013)"
+  },
+  {
+   "name": "electron_regulator",
+   "tris": 44,
+   "manual_ref": "p.6 #5",
+   "label_fr": "Régulateur d'électrons",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "electron_generator",
+   "tris": 44,
+   "manual_ref": "p.6 #6",
+   "label_fr": "Générateur d'électrons",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "cooling_tank_1",
+   "tris": 168,
+   "manual_ref": "p.6 #10",
+   "label_fr": "Réservoir d'alimentation du refroidissement",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "cooling_tank_2",
+   "tris": 168,
+   "manual_ref": "p.6 #10",
+   "label_fr": "Réservoir d'alimentation du refroidissement",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "cooling_pump",
+   "tris": 44,
+   "manual_ref": "p.6 #9",
+   "label_fr": "Pompe de refroidissement des singularités",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "cooling_fan_blades",
+   "tris": 44,
+   "manual_ref": "p.8 (#1)",
+   "label_fr": "Ventilateur de refroidissement – tourner autour de X",
+   "source": "Étiquette non officielle (forum Paranormalis, 2013)"
+  },
+  {
+   "name": "cooling_fan_frame",
+   "tris": 44,
+   "manual_ref": "p.8 (#1)",
+   "label_fr": "Cadre du ventilateur",
+   "source": "Étiquette non officielle (forum Paranormalis, 2013)"
+  },
+  {
+   "name": "cesium_clock_1",
+   "tris": 44,
+   "manual_ref": "p.8 (#5) ; message de Titor « cesium clocks »",
+   "label_fr": "Horloge au césium n° 1",
+   "source": "Étiquette non officielle (forum Paranormalis, 2013)"
+  },
+  {
+   "name": "cesium_clock_2",
+   "tris": 44,
+   "manual_ref": "p.8 (#5) ; message de Titor « cesium clocks »",
+   "label_fr": "Horloge au césium n° 2",
+   "source": "Étiquette non officielle (forum Paranormalis, 2013)"
+  },
+  {
+   "name": "cesium_clock_3",
+   "tris": 44,
+   "manual_ref": "p.8 (#5) ; message de Titor « cesium clocks »",
+   "label_fr": "Horloge au césium n° 3",
+   "source": "Étiquette non officielle (forum Paranormalis, 2013)"
+  },
+  {
+   "name": "gravity_sensor_unit",
+   "tris": 44,
+   "manual_ref": "p.6 #11",
+   "label_fr": "Unité de capteurs de gravité",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "vgl_unit",
+   "tris": 44,
+   "manual_ref": "p.8 (#30) ; message de Titor « Variable Gravity Lock »",
+   "label_fr": "VGL – verrou de gravité variable",
+   "source": "Étiquette non officielle (forum Paranormalis, 2013)"
+  },
+  {
+   "name": "control_computer_1",
+   "tris": 12,
+   "manual_ref": "p.8 (#17/#35)",
+   "label_fr": "Unité de calcul n° 1",
+   "source": "Étiquette non officielle (forum Paranormalis, 2013)"
+  },
+  {
+   "name": "control_computer_2",
+   "tris": 12,
+   "manual_ref": "p.8 (#17/#35)",
+   "label_fr": "Unité de calcul n° 2",
+   "source": "Étiquette non officielle (forum Paranormalis, 2013)"
+  },
+  {
+   "name": "battery_pack",
+   "tris": 44,
+   "manual_ref": "p.6 #12",
+   "label_fr": "Alimentation par batterie",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "battery_pack_terminal_p",
+   "tris": 28,
+   "manual_ref": "p.6 #12",
+   "label_fr": "Borne positive",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "battery_pack_terminal_n",
+   "tris": 28,
+   "manual_ref": "p.6 #12",
+   "label_fr": "Borne négative",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "emergency_view_screen",
+   "tris": 44,
+   "manual_ref": "p.7 #4",
+   "label_fr": "Écran de visualisation d'urgence",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "emergency_disconnect",
+   "tris": 44,
+   "manual_ref": "p.7 #5",
+   "label_fr": "Coupure d'urgence (bouton) – s'enfonce en -Z",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "main_switch_base",
+   "tris": 12,
+   "manual_ref": "p.7 #6",
+   "label_fr": "Interrupteur principal ON/OFF (socle)",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "main_switch_lever",
+   "tris": 28,
+   "manual_ref": "p.7 #6",
+   "label_fr": "Interrupteur principal ON/OFF (levier) – pivot à la base",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "emergency_controls",
+   "tris": 12,
+   "manual_ref": "p.7 #8",
+   "label_fr": "Commandes d'urgence (grille de voyants)",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "emergency_controls_led_01",
+   "tris": 20,
+   "manual_ref": "p.7 #8",
+   "label_fr": "Voyant d'état",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "emergency_controls_led_02",
+   "tris": 20,
+   "manual_ref": "p.7 #8",
+   "label_fr": "Voyant d'état",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "emergency_controls_led_03",
+   "tris": 20,
+   "manual_ref": "p.7 #8",
+   "label_fr": "Voyant d'état",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "emergency_controls_led_04",
+   "tris": 20,
+   "manual_ref": "p.7 #8",
+   "label_fr": "Voyant d'état",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "emergency_controls_led_05",
+   "tris": 20,
+   "manual_ref": "p.7 #8",
+   "label_fr": "Voyant d'état",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "emergency_controls_led_06",
+   "tris": 20,
+   "manual_ref": "p.7 #8",
+   "label_fr": "Voyant d'état",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "emergency_controls_led_07",
+   "tris": 20,
+   "manual_ref": "p.7 #8",
+   "label_fr": "Voyant d'état",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "emergency_controls_led_08",
+   "tris": 20,
+   "manual_ref": "p.7 #8",
+   "label_fr": "Voyant d'état",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "emergency_controls_led_09",
+   "tris": 20,
+   "manual_ref": "p.7 #8",
+   "label_fr": "Voyant d'état",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "emergency_controls_led_10",
+   "tris": 20,
+   "manual_ref": "p.7 #8",
+   "label_fr": "Voyant d'état",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "emergency_controls_led_11",
+   "tris": 20,
+   "manual_ref": "p.7 #8",
+   "label_fr": "Voyant d'état",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "emergency_controls_led_12",
+   "tris": 20,
+   "manual_ref": "p.7 #8",
+   "label_fr": "Voyant d'état",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "emergency_controls_led_13",
+   "tris": 20,
+   "manual_ref": "p.7 #8",
+   "label_fr": "Voyant d'état",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "emergency_controls_led_14",
+   "tris": 20,
+   "manual_ref": "p.7 #8",
+   "label_fr": "Voyant d'état",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "emergency_controls_led_15",
+   "tris": 20,
+   "manual_ref": "p.7 #8",
+   "label_fr": "Voyant d'état",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "emergency_controls_led_16",
+   "tris": 20,
+   "manual_ref": "p.7 #8",
+   "label_fr": "Voyant d'état",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "emergency_controls_led_17",
+   "tris": 20,
+   "manual_ref": "p.7 #8",
+   "label_fr": "Voyant d'état",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "emergency_controls_led_18",
+   "tris": 20,
+   "manual_ref": "p.7 #8",
+   "label_fr": "Voyant d'état",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "emergency_controls_led_19",
+   "tris": 20,
+   "manual_ref": "p.7 #8",
+   "label_fr": "Voyant d'état",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "emergency_controls_led_20",
+   "tris": 20,
+   "manual_ref": "p.7 #8",
+   "label_fr": "Voyant d'état",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "remote_storage_unit",
+   "tris": 12,
+   "manual_ref": "p.7 #9",
+   "label_fr": "Rangement de la télécommande",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "remote_control_unit",
+   "tris": 44,
+   "manual_ref": "p.7 #3, p.4",
+   "label_fr": "Télécommande (reliée par câble)",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "cable_remote",
+   "tris": 192,
+   "manual_ref": "p.7 #3",
+   "label_fr": "Câble de la télécommande",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "cable_power_battery",
+   "tris": 144,
+   "manual_ref": "p.6 #12 → #6",
+   "label_fr": "Câble batterie → générateur d'électrons",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "cable_injector_main",
+   "tris": 96,
+   "manual_ref": "p.6 #6 → #4",
+   "label_fr": "Ligne générateur → injecteur (main)",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "cable_injector_steering",
+   "tris": 96,
+   "manual_ref": "p.6 #6 → #4",
+   "label_fr": "Ligne générateur → injecteur (steering)",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "cable_clock_data",
+   "tris": 96,
+   "manual_ref": "p.8 (#29/#33)",
+   "label_fr": "Bus de données horloges → calcul",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "cable_cooling",
+   "tris": 144,
+   "manual_ref": "p.6 #9 → #8",
+   "label_fr": "Conduite de refroidissement",
+   "source": "Manuel C204 posté par Titor (Internet Archive)"
+  },
+  {
+   "name": "radius_sensor_main",
+   "tris": 28,
+   "manual_ref": "Bon de commande n°7 « Status / radius sensor »",
+   "label_fr": "Capteur de singularité / rayon – principale (#1 p.7)",
+   "source": "Bon de commande BC-C204-GE-001 (d'après les messages de Titor 2000-2001)"
+  },
+  {
+   "name": "radius_sensor_steering",
+   "tris": 28,
+   "manual_ref": "Bon de commande n°7 « Status / radius sensor »",
+   "label_fr": "Capteur de singularité / rayon – de direction (#2 p.7)",
+   "source": "Bon de commande BC-C204-GE-001 (d'après les messages de Titor 2000-2001)"
+  },
+  {
+   "name": "radiation_firewall",
+   "tris": 12,
+   "manual_ref": "Bon de commande n°20 « Radiation / Firewall »",
+   "label_fr": "Pare-feu / protection radiations (plaque de blindage)",
+   "source": "Bon de commande BC-C204-GE-001 (d'après les messages de Titor 2000-2001)"
+  },
+  {
+   "name": "cooling_pump_2",
+   "tris": 44,
+   "manual_ref": "p.6 #9 ; bon de commande n°9 (qté 2)",
+   "label_fr": "Pompe de refroidissement des singularités n° 2",
+   "source": "Bon de commande BC-C204-GE-001 (d'après les messages de Titor 2000-2001)"
+  },
+  {
+   "name": "cesium_clock_4",
+   "tris": 44,
+   "manual_ref": "p.8 (#5) ; bon de commande n°12 (qté 4)",
+   "label_fr": "Horloge au césium n° 4",
+   "source": "Bon de commande BC-C204-GE-001 (d'après les messages de Titor 2000-2001)"
+  },
+  {
+   "name": "control_computer_3",
+   "tris": 12,
+   "manual_ref": "p.8 (#17/#35) ; bon de commande n°13 (qté 3)",
+   "label_fr": "Unité de calcul n° 3",
+   "source": "Bon de commande BC-C204-GE-001 (d'après les messages de Titor 2000-2001)"
+  }
+ ],
+ "version": 2,
+ "added_v2": [
+  "radius_sensor_main",
+  "radius_sensor_steering",
+  "radiation_firewall",
+  "cooling_pump_2",
+  "cesium_clock_4",
+  "control_computer_3"
+ ]
+}

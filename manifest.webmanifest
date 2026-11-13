@@ -1,0 +1,10 @@
+{
+  "name": "Mission Titor · C204",
+  "short_name": "Mission Titor",
+  "lang": "fr",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#07090c",
+  "theme_color": "#07090c",
+  "description": "Jeu 3D : opérateur de l’unité C204 dans une Corvette 1967."
+}
