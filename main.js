@@ -191,7 +191,10 @@ function makeLoader() {
   return new GLTFLoader().setDRACOLoader(draco).setKTX2Loader(ktx2).setMeshoptDecoder(MeshoptDecoder);
 }
 
-function killGlass(root) {
+/** Strip transmission everywhere (never a second glass pass).
+ *  Corvette body glass: simple alpha so the cabin unit is visible.
+ *  C204 port glass stays opaque and tinted. */
+function prepareMaterials(root, { carGlass = false } = {}) {
   root.traverse((o) => {
     if (!o.isMesh) return;
     o.castShadow = false;
@@ -200,14 +203,28 @@ function killGlass(root) {
     for (const m of mats) {
       if (!m) continue;
       if ('transmission' in m && m.transmission) m.transmission = 0;
-      const name = (m.name || o.name || '').toLowerCase();
-      const isGlass = m.transparent || m.opacity < 1 || name.includes('glass') || name.includes('port');
-      if (isGlass) {
+      const matName = (m.name || '').toLowerCase();
+      const objName = (o.name || '').toLowerCase();
+      const isCorvetteGlass = matName === 'corvette_glass'
+        || /windshield_glass|door_window/.test(objName);
+      const isPortGlass = /port/.test(matName) || (/glass/.test(matName) && !isCorvetteGlass)
+        || (/port/.test(objName) && /glass/.test(objName));
+      if (carGlass && isCorvetteGlass) {
+        m.transparent = true;
+        m.opacity = 0.35;
+        m.depthWrite = false;
+        m.alphaTest = 0;
+        m.side = THREE.DoubleSide;
+        if (m.color) m.color.set(0xa8c0cc);
+        m.metalness = 0.12;
+        m.roughness = 0.08;
+        o.renderOrder = 1;
+      } else if (isPortGlass || ((m.transparent || m.opacity < 1) && !isCorvetteGlass)) {
         m.transparent = false;
         m.opacity = 1;
         m.depthWrite = true;
         m.alphaTest = 0;
-        if (name.includes('glass') || name.includes('port')) {
+        if (/glass|port/.test(matName) || /glass|port/.test(objName)) {
           if (m.color) m.color.set(0x1a2830);
           m.metalness = Math.min(0.4, m.metalness || 0);
           m.roughness = Math.max(0.25, m.roughness || 0.4);
@@ -317,7 +334,7 @@ async function loadModels() {
 
   c204.root = gUnit.scene;
   c204.root.name = 'c204_standalone';
-  killGlass(c204.root);
+  prepareMaterials(c204.root);
   mergeNamed(c204.root, (n) => /^emergency_controls_led_/.test(n));
   c204.mixer = new THREE.AnimationMixer(c204.root);
   for (const clip of gUnit.animations) c204.clips[clip.name] = clip;
@@ -327,7 +344,7 @@ async function loadModels() {
 
   car.root = gCar.scene;
   car.root.name = 'corvette_root_scene';
-  killGlass(car.root);
+  prepareMaterials(car.root, { carGlass: true });
   car.mixer = new THREE.AnimationMixer(car.root);
   for (const clip of gCar.animations) car.clips[clip.name] = clip;
   car.root.traverse((o) => {
@@ -352,6 +369,20 @@ async function loadModels() {
   if (embedded) { car.root.updateWorldMatrix(true, true); mergeByMaterial(embedded, 'c204_embedded'); }
   car.root.visible = true;
   scene.add(car.root);
+
+  // Roadster: hide the closed soft top so the C204 unit in the cabin is visible
+  // (menu, drive, jump). The top_down clip is not used because playClip()
+  // stops all other car actions (wheels_spin, jump).
+  const softTop = car.root.getObjectByName('soft_top');
+  if (softTop) softTop.visible = false;
+
+  // Warm fill in the open cabin so the unit is readable at night (no shadow).
+  const cabinLight = new THREE.PointLight(0xffe8c8, 4.5, 5.5, 1.2);
+  cabinLight.name = 'cabin_fill';
+  // In front of the unit, lighting the ID / DANGER plates (front face).
+  cabinLight.position.set(0.15, 0.95, -0.35);
+  cabinLight.castShadow = false;
+  car.root.add(cabinLight);
 
   playClip(c204, 'idle', THREE.LoopRepeat);
   if (car.clips.idle) playClip(car, 'idle', THREE.LoopRepeat);
@@ -413,8 +444,10 @@ function setMode(next) {
       if (a) a.time = a.getClip().duration;
     }
   } else if (menu) {
-    orbit.dist = 6.2; orbit.az = 0.95; orbit.pol = 1.22;
-    orbit.target.set(0, 0.35, 0);
+    const land = window.innerWidth > window.innerHeight && window.innerHeight <= 500;
+    orbit.dist = land ? 5.2 : 5.4;
+    orbit.az = 0.9; orbit.pol = 0.78;
+    orbit.target.set(land ? 1.25 : 0, 0.4, 0);
     orbit.minD = 3; orbit.maxD = 16;
     if (car.root) { car.root.position.set(0, 0, 0); car.root.rotation.set(0, 0.55, 0); }
   } else if (drive) {
@@ -721,6 +754,9 @@ function openLinks() {
 
 function openBriefing() {
   AudioSys.unlock();
+  // Every new run started from the menu must reset lives / score / level.
+  // (Game-over "Menu" then "Commencer" used to keep 0 lives.)
+  resetRun();
   setMode('briefing');
   $('menu').classList.add('hidden');
   $('briefing').classList.remove('hidden');
@@ -748,6 +784,7 @@ function goMenu() {
 }
 
 function startDrive() {
+  if (lives <= 0) resetRun();
   $('briefing').classList.add('hidden');
   setMode('drive');
   AudioSys.beep(392, 0.1, 'square', 0.05);
@@ -1336,13 +1373,17 @@ function updateDrive(dt) {
     car.root.rotation.z = -input.x * 0.08;
   }
   for (const w of car.wheels) w.rotation.x -= drive.speed * dt * 1.6;
-  camera.position.set(drive.x * 0.7, 1.7, 6.5);
-  camera.lookAt(drive.x, 0.7, 0);
+  // Elevated front 3/4, looking down into the open cabin at the unit plates.
+  camera.position.set(drive.x + 2.7, 3.35, 2.85);
+  camera.lookAt(drive.x, 0.5, -0.7);
 }
 
 function updateMenu(dt) {
   if (!prefersReduce) orbit.az += dt * 0.12;
   if (car.root) car.root.rotation.y = 0.35;
+  const land = window.innerWidth > window.innerHeight && window.innerHeight <= 500;
+  orbit.target.set(land ? 1.25 : 0, 0.4, 0);
+  if (land && orbit.dist > 6) orbit.dist = 5.6;
   applyOrbit();
 }
 
@@ -1522,8 +1563,9 @@ async function boot() {
   clock.start();
   loop();
   if (!isTest && 'serviceWorker' in navigator) {
-    try { await navigator.serviceWorker.register('./sw.js?v=' + VERSION); }
-    catch (e) { console.warn('SW:', e); }
+    try {
+      await navigator.serviceWorker.register('./sw.js?v=' + VERSION, { updateViaCache: 'none' });
+    } catch (e) { console.warn('SW:', e); }
   }
 }
 

@@ -1,4 +1,4 @@
-// v0.1.0 smoke: load, minigames via hook, jump, exploded card, 0 console errors
+// v0.1.1 smoke: bug 1 (lives reset),  load, minigames via hook, jump, exploded card, 0 console errors
 // 412×915 and 915×412
 const { chromium } = require('playwright-core');
 const BASE = process.argv[2] || 'http://127.0.0.1:8768/?t=1';
@@ -57,12 +57,38 @@ async function suite(page, tag, w, h, shots) {
   const g = async (fn) => page.evaluate(fn);
 
   ok(prefix + 'ready', await g(() => !!__game.ready));
-  ok(prefix + 'version', (await g(() => __game.version)) === '0.1.0', await g(() => __game.version));
+  ok(prefix + 'version', (await g(() => __game.version)) === '0.1.1', await g(() => __game.version));
   const nodes = await g(() => __game.nodes);
   ok(prefix + 'nodes', nodes.includes('housing') && nodes.includes('cesium_clock_1') && nodes.includes('vgl_unit'), nodes.length);
   const clips = await g(() => __game.clips);
   ok(prefix + 'clips.c204', clips.c204.includes('explode') && clips.c204.includes('idle'), clips.c204);
   ok(prefix + 'clips.car', Array.isArray(clips.car), clips.car);
+
+  // Bug 2: soft top hidden, Corvette glass is simple alpha (no transmission)
+  const vis = await g(() => {
+    const car = __game.car;
+    const top = car?.getObjectByName('soft_top');
+    const glass = [];
+    car?.traverse((o) => {
+      if (!o.isMesh || !o.material) return;
+      const mats = Array.isArray(o.material) ? o.material : [o.material];
+      for (const m of mats) {
+        if ((m.name || '') === 'Corvette_Glass' || /windshield_glass|door_window/.test(o.name || '')) {
+          glass.push({
+            name: o.name,
+            transparent: !!m.transparent,
+            opacity: m.opacity,
+            depthWrite: !!m.depthWrite,
+            transmission: m.transmission || 0,
+            renderOrder: o.renderOrder,
+          });
+        }
+      }
+    });
+    return { topHidden: top ? top.visible === false : 'missing', glass };
+  });
+  ok(prefix + 'softTop.hidden', vis.topHidden === true, vis.topHidden);
+  ok(prefix + 'glass.alpha', vis.glass.length > 0 && vis.glass.every((g) => g.transparent && g.opacity > 0.2 && g.opacity < 0.6 && g.depthWrite === false && g.transmission === 0), vis.glass);
 
   // Menu measure
   await g(() => __game.openMenu());
@@ -92,7 +118,7 @@ async function suite(page, tag, w, h, shots) {
   const mExp = await measure(page, 1200);
   R[prefix + 'explode'] = mExp;
   ok(prefix + 'explode.calls', mExp.calls < 100, mExp.calls);
-  if (shots) await page.screenshot({ path: OUT + '/titor-c204-jeu-v010-eclate.png', type: 'png' });
+  if (shots) await page.screenshot({ path: OUT + '/titor-c204-jeu-v011-eclate.png', type: 'png' });
   await g(() => { __game.closeCard(); __game.openMenu(); });
 
   // Mission: skip to minigames
@@ -103,7 +129,7 @@ async function suite(page, tag, w, h, shots) {
 
   if (shots) {
     await sleep(300);
-    await page.screenshot({ path: OUT + '/titor-c204-jeu-v010-minijeu.png', type: 'png' });
+    await page.screenshot({ path: OUT + '/titor-c204-jeu-v011-minijeu.png', type: 'png' });
   }
   const mMg = await measure(page, 1000);
   R[prefix + 'minigame'] = mMg;
@@ -137,7 +163,39 @@ async function suite(page, tag, w, h, shots) {
   const mDrive = await measure(page, 1200);
   R[prefix + 'drive'] = mDrive;
   ok(prefix + 'drive.calls', mDrive.calls < 100, mDrive.calls);
-  if (shots) await page.screenshot({ path: OUT + '/titor-c204-jeu-v010.png', type: 'png' });
+  if (shots) await page.screenshot({ path: OUT + '/titor-c204-jeu-v011.png', type: 'png' });
+
+  // Bug 1: game over → Menu → Commencer la mission must reset lives to 3
+  await g(() => { __game.resetRun(); __game.startDrive(); __game.startSequence(); });
+  await page.waitForFunction(() => window.__game.mode === 'minigame', null, { timeout: 10000 });
+  for (let i = 0; i < 3; i++) {
+    const resHidden = await page.evaluate(() => document.getElementById('result').classList.contains('hidden'));
+    if (!resHidden) {
+      await page.click('#bResGo'); // Réessayer
+      await sleep(250);
+    }
+    await g(() => __game.failCurrent());
+    await sleep(250);
+  }
+  const over = await g(() => ({
+    lives: __game.lives,
+    title: document.getElementById('resTitle').textContent,
+    shown: !document.getElementById('result').classList.contains('hidden'),
+  }));
+  ok(prefix + 'gameover.lives0', over.lives === 0 && over.shown, over);
+  await page.click('#bResMenu'); // Menu, not Recommencer
+  await page.waitForFunction(() => window.__game.mode === 'menu', null, { timeout: 8000 });
+  await sleep(200);
+  await page.click('#bMission');
+  await page.waitForFunction(() => {
+    const b = document.getElementById('briefing');
+    return b && !b.classList.contains('hidden');
+  }, null, { timeout: 8000 });
+  await sleep(150);
+  await page.click('#bBriefGo');
+  await page.waitForFunction(() => window.__game.mode === 'drive', null, { timeout: 8000 });
+  const fresh = await g(() => ({ lives: __game.lives, score: __game.score, level: __game.level, ibm: __game.ibmGot, mode: __game.mode }));
+  ok(prefix + 'newRun.lives3', fresh.lives === 3 && fresh.score === 0 && fresh.level === 1 && fresh.ibm === false && fresh.mode === 'drive', fresh);
 
   // Sources page has links
   await g(() => __game.openSources());

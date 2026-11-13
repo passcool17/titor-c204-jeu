@@ -1,4 +1,4 @@
-/* Mission Titor · C204 — v0.1.0
+/* Mission Titor · C204 — v0.1.1
    Palettes techniques sombre, ambre / cyan. Pas de dégradé violet.
    Cibles tactiles ≥ 44px, safe-area, reduced-motion, contraste.
 */
@@ -136,7 +136,7 @@ button.close {
   top: auto;
   bottom: calc(16px + env(safe-area-inset-bottom, 0px));
   transform: translateX(-50%);
-  max-height: min(62dvh, 560px);
+  max-height: min(52dvh, 480px);
   background: rgba(18, 23, 30, 0.92);
 }
 .panel {
@@ -463,6 +463,39 @@ input[type="range"] {
 
 @media (orientation: landscape) and (max-height: 500px) {
   .panel { max-height: 94dvh; padding: 14px 16px; }
+  /* Side panel: leave the right half free so the Corvette stays visible. */
+  #menu.panel {
+    left: max(12px, env(safe-area-inset-left, 0px));
+    right: auto;
+    top: 50%;
+    bottom: auto;
+    transform: translate(0, -50%);
+    width: min(340px, 44vw);
+    max-height: calc(100dvh - 16px);
+    padding: 12px 14px;
+    overflow: auto;
+  }
+  #menu.panel h1 { font-size: 1.28rem; margin-bottom: 6px; }
+  #menu.panel .lead { font-size: 0.86rem; margin-bottom: 8px; }
+  #menu.panel .disclaimer { font-size: 0.75rem; margin-bottom: 10px; }
+  #menu.panel .kicker { margin-bottom: 4px; }
+  #menu.panel .actions { flex-direction: row; flex-wrap: wrap; gap: 6px; }
+  #menu.panel .actions button {
+    width: calc(50% - 3px);
+    min-height: 44px;
+    font-size: 0.9rem;
+    padding: 8px 10px;
+  }
+  #menu.panel .actions button.primary { width: 100%; }
+  /* Other panels (briefing, result, sources) also sit on the left. */
+  #briefing.panel, #result.panel, #sources.panel, #links.panel {
+    left: max(12px, env(safe-area-inset-left, 0px));
+    right: auto;
+    top: 50%;
+    transform: translate(0, -50%);
+    width: min(380px, 48vw);
+    max-height: calc(100dvh - 16px);
+  }
   #miniHead { padding: 4px 10px; }
   #miniTitle { font-size: 0.95rem; }
   .joy { width: 88px; height: 88px; }

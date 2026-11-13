@@ -1,8 +1,15 @@
-# Mission Titor · C204 — v0.1.0
+# Mission Titor · C204 — v0.1.1
 
 - Lien jouable : https://passcool17.github.io/titor-c204-jeu/
 - Dépôt : https://github.com/passcool17/titor-c204-jeu
-- État : v0.1.0 — nouveau jeu, distinct des applications déjà publiées (`titor-c204`, scène Corvette, `c204-2026`). Le joueur est l’opérateur de l’unité C204, au volant d’une Corvette 1967. Mission (récit de John Titor, 2000-2001) : partir de 2036, aller en 1975 chercher un IBM 5100, revenir en 2036. Chaque saut = quatre mini-jeux de démarrage, puis un maintien du champ. Vue éclatée interactive, fiches étiquetées **Documenté** / **Jamais authentifié** / **Ajout de modèle**, page Sources. Interface en français.
+- État : v0.1.1 — corrections du rapport QA de la v0.1.0 (767c8f6). Nouveau jeu, distinct des applications déjà publiées (`titor-c204`, scène Corvette, `c204-2026`). Le joueur est l’opérateur de l’unité C204, au volant d’une Corvette 1967. Mission (récit de John Titor, 2000-2001) : partir de 2036, aller en 1975 chercher un IBM 5100, revenir en 2036. Chaque saut = quatre mini-jeux de démarrage, puis un maintien du champ. Vue éclatée interactive, fiches étiquetées **Documenté** / **Jamais authentifié** / **Ajout de modèle**, page Sources. Interface en français.
+
+## Corrections v0.1.1 (rapport QA du 12 nov. 2026)
+
+1. **Vies après un game over.** « Menu » puis « Commencer la mission » remettent vies, score et niveau (3 vies). Seul « Recommencer » le faisait en v0.1.0. Test de régression dans `tests/t01.js`.
+2. **Unité visible dans la Corvette.** Le verre de la voiture (`Corvette_Glass`) est en alpha simple (transparent, opacité 0,35, `depthWrite` false, `renderOrder` 1) — **pas de transmission, pas de second passage**. La capote (`soft_top`) est masquée (roadster). Une lumière ponctuelle éclaire la cabine (sans ombre). La caméra de conduite est un 3/4 avant un peu haut, pour voir le boîtier (plaques TMH et DANGER) derrière les sièges. Le verre des hublots de l’unité (`C204_PortGlass`) reste opaque.
+3. **Menu en paysage 915×412.** Le panneau est une colonne à gauche (environ 340 px), compact, avec les boutons sur deux colonnes. La Corvette reste visible à droite.
+4. **Service worker.** Une seule constante `VERSION` (dans `data.js`) sert à l’URL d’enregistrement (`sw.js?v=` + VERSION, `updateViaCache: 'none'`). Le SW lit ce `?v=` pour le nom du cache et les URL précachées. `skipWaiting` + `clients.claim`, suppression des anciens caches à l’activation, HTML en réseau d’abord, `data.js` aussi en réseau d’abord.
 
 ## Contrôles
 
@@ -31,7 +38,7 @@ Depuis ce jeu (menu « Autres scènes ») :
 - [Scène Corvette 1967](https://passcool17.github.io/titor-c204/#corvette)
 - [C204 · 2026 — unité fictive modernisée](https://passcool17.github.io/c204-2026/)
 
-Les liens **retour** dans ces trois applications n’ont **pas** été ajoutés dans cette version : cela demanderait de modifier des dépôts existants, et nécessite l’accord de Pascal.
+Les liens **retour** dans ces trois applications ne sont pas dans ce dépôt (d’autres dépôts, accord de Pascal).
 
 ## Ressources (source et licence)
 
@@ -43,23 +50,23 @@ Les liens **retour** dans ces trois applications n’ont **pas** été ajoutés 
 | detect-gpu 5.0.70 | Benchmarks auto-hébergés (`./detect-gpu-benchmarks`) | MIT |
 | Décodeurs Draco et Basis | copies locales depuis `three/examples/jsm/libs/` (pas de CDN pour les transcodeurs) | Apache-2.0 / Three.js |
 
-Aucun modèle nouveau n’a été commandé. Le verre (`C204_PortGlass`, `Corvette_Glass`) est rendu **opaque** (pas de transmission, pas de second passage). Les maillages de l’unité embarquée dans la Corvette sont fusionnés par matériau, pour rester sous 100 appels de dessin. Ombres désactivées. `pixelRatio` plafonné à 2 ; palier GPU ≤ 1 → `pixelRatio` 1. Service worker manuel, actifs versionnés, HTML en réseau d’abord.
+Aucun modèle nouveau n’a été commandé. Les maillages de l’unité embarquée dans la Corvette sont fusionnés par matériau, pour rester sous 100 appels de dessin. Ombres désactivées. `pixelRatio` plafonné à 2 ; palier GPU ≤ 1 → `pixelRatio` 1.
 
 ## Mesures (412×915, `--gl angle-gl`)
 
-Outil : `node /home/box/opt/perf3d/measure.mjs` (présent aussi sous `/workspace/perf3d/measure.mjs`). **Les fps de la box ne sont pas les fps d’un S20 FE** (ici ANGLE / llvmpipe). 0 erreur console, 0 transmission.
+Outil : `node /home/box/opt/perf3d/measure.mjs` (présent aussi sous `/workspace/perf3d/measure.mjs`). **Les fps de la box ne sont pas les fps d’un S20 FE** (ici ANGLE / llvmpipe). 0 erreur console, 0 transmission. Textures GPU toujours estimées à **36,06 Mo** (atlases WebP 1024, non convertis en KTX2 dans cette version — optionnel, non fait pour limiter le risque visuel).
 
 | Vue | Appels | Triangles | fps box | JS p95 (ms) |
 |---|---:|---:|---:|---:|
-| Menu | 41 | 13 748 | ~60 | 0,5 |
-| Conduite | 55 | 14 680 | ~60 | 0,6 |
-| Mini-jeu | 67 | 4 972 | ~60 | 0,6 |
-| Saut | 56 | 26 968 | ~60 | 0,7 |
-| Éclatée | 72 | 5 352 | ~60 | 0,6 |
+| Menu | 40 | 12 860 | ~60 | 0,4 |
+| Conduite | 44 | 12 824 | ~59 | 0,5 |
+| Mini-jeu | 67 | 4 972 | ~59 | 0,4 |
+| Saut | 56 | 26 232 | ~59 | 0,5 |
+| Éclatée | 72 | 5 352 | ~60 | 0,4 |
 
-Tout est sous 100 appels. Les fps réels sur Samsung Remote Test Lab (S20 FE, `?fps=1`) ne sont **pas encore** mesurés.
+Tout est sous 100 appels. La conduite a moins d’appels qu’en v0.1.0 (capote masquée). Les fps réels sur Samsung Remote Test Lab (S20 FE, `?fps=1`) ne sont **pas encore** mesurés.
 
-Tests Playwright (`tests/t01.js`) : 412×915 et 915×412, 0 erreur console, 0 requête 4xx, chaque mini-jeu complétable via `window.__game`, saut, fiche éclatée, page Sources (8 liens).
+Tests Playwright (`tests/t01.js`) : 412×915 et 915×412, 0 erreur console, 0 requête 4xx, chaque mini-jeu complétable via `window.__game`, saut, fiche éclatée, page Sources (8 liens), régression « game over → Menu → Commencer » (3 vies), capote masquée, verre Corvette en alpha sans transmission.
 
 ## Sources citées
 
@@ -82,14 +89,12 @@ Chaque pièce du GLB ouvre une fiche, regroupée par thème. Étiquette principa
 
 ## Captures
 
-- `/workspace/games3d/titor-c204-jeu-v010.png` — saut (conduite dans le tunnel)
-- `/workspace/games3d/titor-c204-jeu-v010-eclate.png` — vue éclatée + fiche
-- `/workspace/games3d/titor-c204-jeu-v010-minijeu.png` — injection d’électrons
-- `/workspace/games3d/titor-c204-jeu-v010-compare.png` — comparaison jeu (3/4, profil, arrière) / aperçus du modèle / pages 6, 7 et 8 du manuel (Internet Archive)
+- `/workspace/games3d/titor-c204-jeu-v011.png` — conduite, unité visible dans la cabine (capote baissée, verre alpha)
+- `/workspace/games3d/titor-c204-jeu-v011-paysage.png` — menu en 915×412, panneau à gauche, voiture à droite
 
-## Prochaines étapes
+## Limites / prochaines étapes
 
 - Mesurer les fps réels sur S20 FE (Remote Test Lab, `?fps=1`).
+- Mémoire textures encore ~36 Mo GPU ; une conversion KTX2 (ETC1S) réduirait surtout la VRAM, non faite ici.
+- L’IBM 5100 n’a pas de modèle 3D (menus et HUD seulement). L’arrêt en 2000 n’est pas jouable : le retour en 2036 est direct.
 - Accords de Pascal : liens retour dans `titor-c204` et `c204-2026` ; tout nouveau modèle (IBM 5100, etc.).
-- Si besoin : réduire la mémoire textures (~36 Mo GPU estimés, atlases décompressés), améliorer la visibilité de l’unité dans la Corvette (capot / capote), passage optionnel en 2000 comme dans le récit.
-- Envoyer au Testeur QA (fait par le Chef de cabinet, pas par ce dépôt).

@@ -1,10 +1,10 @@
-/* C204 · Mission Titor — textes, fiches, sources. v0.1.0
+/* C204 · Mission Titor — textes, fiches, sources. v0.1.1
    Rien n'est présenté comme réel s'il n'est pas vérifiable.
    « Documenté » = fait vérifiable, avec URL. « Jamais authentifié » = affirmation des posts de Titor, jamais confirmée.
    « Ajout de modèle » = détail géométrique ajouté pour le GLB, absent des documents de 2000-2001.
 */
 
-export const VERSION = '0.1.0';
+export const VERSION = '0.1.1';
 
 export const LINKS = [
   { id: 'machine', title: 'C204 · 2001 — unité et dossier', url: 'https://passcool17.github.io/titor-c204/', note: 'Scène Machine de l’unité, fiches et dossier.' },

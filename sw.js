@@ -1,12 +1,16 @@
-/* Service worker manuel, v0.1.0.
-   Ne met pas tout en cache à l'aveugle : HTML en réseau d'abord,
-   actifs versionnés (GLB, vendor) en cache. */
-const VER = 'titor-c204-jeu-v0.1.0';
+/* Service worker manuel.
+   A single VERSION, taken from the registration URL (?v=), is used for
+   the cache name, the precache query strings, and the page's
+   navigator.serviceWorker.register('./sw.js?v=' + VERSION).
+   HTML is network-first. skipWaiting + clients.claim on install/activate.
+   Old caches are deleted on activate. */
+const VERSION = new URL(self.location.href).searchParams.get('v') || '0';
+const VER = 'titor-c204-jeu-v' + VERSION;
 const PRECACHE = [
   './',
   './index.html',
-  './style.css?v=0.1.0',
-  './main.js?v=0.1.0',
+  './style.css?v=' + VERSION,
+  './main.js?v=' + VERSION,
   './data.js',
   './assets/c204-v2.glb',
   './assets/corvette-v2.glb',
@@ -64,8 +68,19 @@ self.addEventListener('fetch', (e) => {
     || /[?&]v=/.test(url.search)
     || threeCdn;
   if (!known) {
-    // do not blindly cache other requests
-    e.respondWith(fetch(req).catch(() => caches.match(req)));
+    // network-first for unversioned modules (data.js, etc.)
+    e.respondWith((async () => {
+      try {
+        const fresh = await fetch(req);
+        if (fresh && fresh.ok) {
+          const c = await caches.open(VER);
+          c.put(req, fresh.clone());
+        }
+        return fresh;
+      } catch {
+        return caches.match(req);
+      }
+    })());
     return;
   }
   e.respondWith((async () => {
